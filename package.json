@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently -k -n \"API,VITE\" -c \"yellow,cyan\" \"npm run server\" \"vite\"",
+    "dev": "concurrently -k -n API,VITE -c yellow,cyan \"$npm_execpath run server\" \"vite\"",
     "server": "tsx watch server/index.ts",
     "build": "vue-tsc && vite build",
     "preview": "vite preview",
