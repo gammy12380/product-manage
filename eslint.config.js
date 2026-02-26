@@ -5,32 +5,42 @@ import tseslint from 'typescript-eslint'
 
 export default tseslint.config(
     {
-        files: ['**/*.{js,mjs,cjs,ts,vue}'],
-        languageOptions: {
-            globals: {
-                ...globals.browser,
-                ...globals.node,
-            },
-            parserOptions: {
-                parser: tseslint.parser,
-                ecmaVersion: 'latest',
-                sourceType: 'module',
-                extraFileExtensions: ['.vue'],
-            },
-        },
+        // 1. 全域忽略
+        ignores: ['dist/**', 'node_modules/**', 'bin/**', 'src/components/ui/**'],
     },
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
     ...pluginVue.configs['flat/recommended'],
     {
-        rules: {
-            'no-unused-vars': 'warn',
-            '@typescript-eslint/no-unused-vars': 'warn',
-            'vue/multi-word-component-names': 'off',
-            '@typescript-eslint/no-explicit-any': 'warn',
+        // 2. 基本設定
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.node,
+            },
+            ecmaVersion: 'latest',
+            sourceType: 'module',
         },
     },
     {
-        ignores: ['dist/**', 'node_modules/**', 'bin/**', 'scripts/**'],
+        // 3. Vue 檔案專屬設定
+        files: ['**/*.vue'],
+        languageOptions: {
+            parserOptions: {
+                parser: tseslint.parser,
+                extraFileExtensions: ['.vue'],
+            },
+        },
+    },
+    {
+        // 4. 自定義規則
+        rules: {
+            'no-unused-vars': 'off',
+            '@typescript-eslint/no-unused-vars': 'warn',
+            'vue/multi-word-component-names': 'off',
+            '@typescript-eslint/no-explicit-any': 'warn',
+            'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0 }],
+            'no-trailing-spaces': 'error',
+        },
     }
 )
