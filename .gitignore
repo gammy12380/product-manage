@@ -1,0 +1,36 @@
+# 依賴套件
+node_modules/
+package-lock.json
+
+# 建置輸出
+dist/
+dist-ssr/
+
+# 環境變數
+.env
+.env.local
+.env.*.local
+
+# 本地開發設定
+*.local
+
+# 系統
+.DS_Store
+Thumbs.db
+
+# 編輯器
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Log
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+bun-debug.log*
