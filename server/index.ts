@@ -30,7 +30,7 @@ let products: Product[] = JSON.parse(rawData) as Product[]
 
 const app = express()
 app.use(cors())
-app.use(express.json())
+app.use(express.json({ limit: '10mb' }))
 
 // ─── GET /api/products ─────────────────────────────────────────────────────
 const getProducts: RequestHandler = (req, res) => {
