@@ -48,35 +48,42 @@ const formSchema = toTypedSchema(z.object({
     status: z.enum(['active', 'inactive'])
 }))
 
+// 預設值定義
+const defaultValues = {
+    name: '',
+    category: 'electronics' as Product['category'],
+    price: 0,
+    stock: 0,
+    status: 'active' as Product['status']
+}
+
 // 初始化 VeeValidate 表單
 const form = useForm({
     validationSchema: formSchema,
-    initialValues: {
-        name: '',
-        category: 'electronics' as Product['category'],
-        price: 0,
-        stock: 0,
-        status: 'active' as Product['status']
-    }
+    initialValues: defaultValues
 })
 
 // 獨立管理圖片狀態（不透過 VeeValidate）
 const imagePreview = ref('')
 
-// 當傳入的 product 變更時，重設表單數值
-watch(() => props.product, (newVal) => {
-    if (newVal) {
-        form.setValues({
-            name: newVal.name,
-            category: newVal.category,
-            price: newVal.price,
-            stock: newVal.stock,
-            status: newVal.status
-        })
-        imagePreview.value = newVal.image || ''
-    } else {
-        form.resetForm()
-        imagePreview.value = ''
+// 當對話框開啟或 product 變更時，確保表單數值正確初始化
+watch([() => props.open, () => props.product], ([isOpen, newProduct]) => {
+    if (isOpen) {
+        if (newProduct) {
+            form.setValues({
+                name: newProduct.name,
+                category: newProduct.category,
+                price: newProduct.price,
+                stock: newProduct.stock,
+                status: newProduct.status
+            })
+            imagePreview.value = newProduct.image || ''
+        } else {
+            form.resetForm({
+                values: defaultValues
+            })
+            imagePreview.value = ''
+        }
     }
 }, { immediate: true })
 
@@ -105,7 +112,7 @@ const handleConfirm = () => {
     :open="open"
     :title="isNew ? '新增商品' : '編輯商品資訊'"
     :is-loading="isLoading"
-    @update:open="(val) => { emit('update:open', val); if(!val) form.resetForm() }"
+    @update:open="(val) => emit('update:open', val)"
     @confirm="handleConfirm"
   >
     <form
